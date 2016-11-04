@@ -6,33 +6,46 @@ public class CraneController : MonoBehaviour {
     public GameObject[] blockTypes;
     GameObject currentBlock = null;
     public float xRange = 3.0f;
+    public float yOffset = 3.0f; // distance from highest point to crane
+    public HeightChecker heightChecker;
+    LineRenderer lineRenderer;
+    DistanceJoint2D distanceJoint;
 
 	// Use this for initialization
 	void Start ()
     {
         StartCoroutine(SpawnBox(0f));
-        this.GetComponent<LineRenderer>().SetPosition(0, this.transform.position);
-        this.GetComponent<LineRenderer>().SetPosition(1, this.transform.position);
+        distanceJoint = this.GetComponent<DistanceJoint2D>();
+        lineRenderer = this.GetComponent<LineRenderer>();
+        lineRenderer.SetPosition(0, this.transform.position);
+        lineRenderer.SetPosition(1, this.transform.position);
     }
 
     // Update is called once per frame
     void Update()
     {
         Vector3 pos = this.transform.position;
-        this.transform.position = new Vector3(xRange * Mathf.Cos(Time.realtimeSinceStartup * 0.7f), pos.y, pos.z);
-        this.GetComponent<LineRenderer>().SetPosition(0, this.transform.position);
-        this.GetComponent<LineRenderer>().SetPosition(1, this.transform.position);
 
+        // move crane horizontally
+        float newX = xRange * Mathf.Cos(Time.time * 0.7f);
+
+        // move crane vertically
+        float newY = pos.y + 0.01f * (heightChecker.height + yOffset - pos.y);
+
+        this.transform.position = new Vector3(newX, newY, pos.z);
+        lineRenderer.SetPosition(0, this.transform.position);
+        lineRenderer.SetPosition(1, this.transform.position);
+                
         if (currentBlock != null)
         {
-			if (Input.GetMouseButtonDown(0) || Input.GetKey(KeyCode.Space))
+            lineRenderer.SetPosition(1, currentBlock.transform.position);
+            if (Input.GetMouseButtonDown(0) || Input.GetKey(KeyCode.Space))
             {
-                this.GetComponent<LineRenderer>().SetPosition(1, this.transform.position);
-                this.GetComponent<DistanceJoint2D>().connectedBody = null;
+                distanceJoint.connectedBody = null;
                 currentBlock = null;
                 StartCoroutine(SpawnBox(2f));
             }
-            this.GetComponent<LineRenderer>().SetPosition(1, currentBlock.transform.position);
+            
         }
     }
 
@@ -42,8 +55,8 @@ public class CraneController : MonoBehaviour {
 
         Vector3 pos = this.transform.position;
         GameObject nextBlock = (GameObject)Instantiate(blockTypes[Random.Range(0, blockTypes.Length)], new Vector3(pos.x - 1.0f, pos.y - 2.0f, pos.z), Quaternion.identity);
-        this.GetComponent<LineRenderer>().SetPosition(1, nextBlock.transform.position);
-        this.GetComponent<DistanceJoint2D>().connectedBody = nextBlock.GetComponent<Rigidbody2D>();
+        lineRenderer.SetPosition(1, nextBlock.transform.position);
+        distanceJoint.connectedBody = nextBlock.GetComponent<Rigidbody2D>();
         currentBlock = nextBlock;
     }
 }

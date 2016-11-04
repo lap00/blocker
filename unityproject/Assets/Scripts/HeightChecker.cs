@@ -10,7 +10,7 @@ public class HeightChecker : MonoBehaviour {
 
         GameObject[] blocks = GameObject.FindGameObjectsWithTag("Block");
 
-        height = -200;
+        height = 0;
 
         foreach (GameObject block in blocks)
         {
