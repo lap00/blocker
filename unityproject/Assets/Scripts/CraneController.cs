@@ -43,7 +43,6 @@ public class CraneController : MonoBehaviour {
         Vector3 pos = this.transform.position;
         GameObject nextBlock = (GameObject)Instantiate(blockTypes[Random.Range(0, blockTypes.Length)], new Vector3(pos.x - 1.0f, pos.y - 2.0f, pos.z), Quaternion.identity);
         this.GetComponent<LineRenderer>().SetPosition(1, nextBlock.transform.position);
-        nextBlock.GetComponent<Rigidbody2D>().mass = Random.Range(1.0f, 5.0f);
         this.GetComponent<DistanceJoint2D>().connectedBody = nextBlock.GetComponent<Rigidbody2D>();
         currentBlock = nextBlock;
     }
