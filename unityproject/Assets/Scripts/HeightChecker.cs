@@ -10,10 +10,13 @@ public class HeightChecker : MonoBehaviour {
     public Text blockCountText;
     public float totalMass;
     public Text totalMassText;
+    public float unitsPerMeter;
 
     void Start()
     {
-        heightText.text = "asdsad";
+        PrintHeight();
+        PrintBlockCount();
+        PrintTotalMass();
     }
 	
 	// Update is called once per frame
@@ -33,15 +36,30 @@ public class HeightChecker : MonoBehaviour {
                 height = blockHeight;
             }
 
-            heightText.text = "Height: " + height.ToString() + " m";
+            PrintHeight();
 
             blockCount++;
 
-            blockCountText.text = "Block count: " + blockCount.ToString();
+            PrintBlockCount();
 
             totalMass += block.GetComponent<Rigidbody2D>().mass;
 
-            totalMassText.text = "Total mass: " + totalMass.ToString();
+            PrintTotalMass();
         }
 	}
+
+    void PrintHeight()
+    {
+        heightText.text = "Height: " + (height / unitsPerMeter).ToString("n2");
+    }
+
+    void PrintBlockCount()
+    {
+        blockCountText.text = "Block count: " + blockCount.ToString();
+    }
+
+    void PrintTotalMass()
+    {
+        totalMassText.text = "Total mass: " + totalMass.ToString();
+    }
 }
