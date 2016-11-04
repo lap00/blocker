@@ -13,8 +13,12 @@ public class HttpClientTester : MonoBehaviour {
 
     public void OnGUI()
     {
-        if (GUI.Button(new Rect(50, 100, 100, 20), "Get highscores")) {
+        if (GUI.Button(new Rect(50, 50, 100, 20), "Get highscores")) {
             client.GetHighscores(this.LogHighscores);
+        }
+        
+        if (GUI.Button(new Rect(50, 100, 100, 20), "Post highscore")) {
+            client.PostHighscore(new HttpClient.Highscore("Jakob", 1000.5f));
         }
     }
 
