@@ -25,7 +25,7 @@ public class CraneController : MonoBehaviour {
 
         if (currentBlock != null)
         {
-            if (Input.GetMouseButtonDown(0))
+			if (Input.GetMouseButtonDown(0) || Input.GetKey(KeyCode.Space))
             {
                 this.GetComponent<LineRenderer>().SetPosition(1, this.transform.position);
                 this.GetComponent<DistanceJoint2D>().connectedBody = null;
