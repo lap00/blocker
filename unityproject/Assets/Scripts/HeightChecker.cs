@@ -60,6 +60,7 @@ public class HeightChecker : MonoBehaviour {
 
     void PrintTotalMass()
     {
-        totalMassText.text = "Total mass: " + totalMass.ToString();
+        print("Total mass: " + totalMass.ToString());
+        totalMassText.text = "Total mass: " + totalMass.ToString("n2");
     }
 }
