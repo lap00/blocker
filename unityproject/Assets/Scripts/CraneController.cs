@@ -5,11 +5,12 @@ public class CraneController : MonoBehaviour {
 
     public GameObject[] blockTypes;
     GameObject currentBlock = null;
+    public float xRange = 3.0f;
 
 	// Use this for initialization
 	void Start ()
     {
-        StartCoroutine(SpawnBox());
+        StartCoroutine(SpawnBox(0f));
         this.GetComponent<LineRenderer>().SetPosition(0, this.transform.position);
         this.GetComponent<LineRenderer>().SetPosition(1, this.transform.position);
     }
@@ -17,6 +18,11 @@ public class CraneController : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
+        Vector3 pos = this.transform.position;
+        this.transform.position = new Vector3(xRange * Mathf.Cos(Time.realtimeSinceStartup * 0.7f), pos.y, pos.z);
+        this.GetComponent<LineRenderer>().SetPosition(0, this.transform.position);
+        this.GetComponent<LineRenderer>().SetPosition(1, this.transform.position);
+
         if (currentBlock != null)
         {
             if (Input.GetMouseButtonDown(0))
@@ -24,20 +30,19 @@ public class CraneController : MonoBehaviour {
                 this.GetComponent<LineRenderer>().SetPosition(1, this.transform.position);
                 this.GetComponent<DistanceJoint2D>().connectedBody = null;
                 currentBlock = null;
-                StartCoroutine(SpawnBox());
+                StartCoroutine(SpawnBox(2f));
             }
             this.GetComponent<LineRenderer>().SetPosition(1, currentBlock.transform.position);
         }
     }
 
-    IEnumerator SpawnBox()
+    IEnumerator SpawnBox(float wait)
     {
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(wait);
 
         Vector3 pos = this.transform.position;
-        GameObject nextBlock = (GameObject)Instantiate(blockTypes[0], new Vector3(pos.x - 1.0f, pos.y - 2.0f, pos.z), Quaternion.identity);
+        GameObject nextBlock = (GameObject)Instantiate(blockTypes[Random.Range(0, blockTypes.Length)], new Vector3(pos.x - 1.0f, pos.y - 2.0f, pos.z), Quaternion.identity);
         this.GetComponent<LineRenderer>().SetPosition(1, nextBlock.transform.position);
-        nextBlock.GetComponent<Rigidbody2D>().mass = Random.Range(1.0f, 5.0f);
         this.GetComponent<DistanceJoint2D>().connectedBody = nextBlock.GetComponent<Rigidbody2D>();
         currentBlock = nextBlock;
     }
