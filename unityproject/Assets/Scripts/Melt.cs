@@ -27,7 +27,6 @@ public class Melt : MonoBehaviour {
         scale.Scale(new Vector2(1 - meltFactor, 1 - meltFactor));
         mass *= (1 - meltFactor);
 
-        print("mass: " + mass);
         if (scale.x < inActiveThreshold)
         {
             gameObject.SetActive(false);

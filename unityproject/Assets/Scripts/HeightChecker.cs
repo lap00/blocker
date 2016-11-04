@@ -11,12 +11,14 @@ public class HeightChecker : MonoBehaviour {
     public float totalMass;
     public Text totalMassText;
     public float unitsPerMeter;
+    public Text gameOverScoreText;
 
     void Start()
     {
         PrintHeight();
         PrintBlockCount();
         PrintTotalMass();
+        updateGameOverScoreText();
     }
 	
 	// Update is called once per frame
@@ -45,6 +47,8 @@ public class HeightChecker : MonoBehaviour {
             totalMass += block.GetComponent<Rigidbody2D>().mass;
 
             PrintTotalMass();
+
+            updateGameOverScoreText();
         }
 	}
 
@@ -60,7 +64,11 @@ public class HeightChecker : MonoBehaviour {
 
     void PrintTotalMass()
     {
-        print("Total mass: " + totalMass.ToString());
         totalMassText.text = "Total mass: " + totalMass.ToString("n2");
+    }
+
+    void updateGameOverScoreText()
+    {
+        gameOverScoreText.text = "Height: " + (height / unitsPerMeter).ToString("n2") + "m \n Block count: " + blockCount.ToString() + " Total mass: " + totalMass.ToString("n2");
     }
 }

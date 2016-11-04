@@ -14,11 +14,8 @@ public class PauseMenu : MonoBehaviour {
 
 		if (isPaused) {
 			pausedMenuCanvas.SetActive (true);
-			Time.timeScale = 0f;
-
 		} else {
 			pausedMenuCanvas.SetActive (false);
-			Time.timeScale = 1f;
 		}
 
 		if (Input.GetKeyDown (KeyCode.Escape)) 
@@ -30,11 +27,20 @@ public class PauseMenu : MonoBehaviour {
 	public void Menu ()
 	{
 		isPaused = !isPaused;
+        if (isPaused)
+        {
+            Time.timeScale = 0f;
 
-	}
+        }
+        else
+        {
+            Time.timeScale = 1f;
+        }
+    }
 	public void Resume ()
 	{
 		isPaused = false;
+        Time.timeScale = 1f;
 	}
 
 	public void Restart ()
