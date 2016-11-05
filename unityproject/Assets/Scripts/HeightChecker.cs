@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System;
 
 public class HeightChecker : MonoBehaviour {
 
@@ -14,6 +15,7 @@ public class HeightChecker : MonoBehaviour {
     public Text gameOverScoreText;
     public GameObject nameContainer;
     public string playerName;
+    public string guid;
 
     void Start()
     {
@@ -23,6 +25,7 @@ public class HeightChecker : MonoBehaviour {
         updateGameOverScoreText();
         nameContainer = GameObject.Find("NameContainer");
         playerName = nameContainer.GetComponent<NameContainer>().playerName;
+        guid = System.Guid.NewGuid().ToString();
     }
 	
 	// Update is called once per frame
@@ -33,10 +36,10 @@ public class HeightChecker : MonoBehaviour {
         height = 0;
         blockCount = 0;
         totalMass = 0;
-
+        
         foreach (GameObject block in blocks)
         {
-            float blockHeight = block.transform.position.y;
+            float blockHeight = block.GetComponent<BoxCollider2D>().bounds.max.y;
             if (blockHeight > height)
             {
                 height = blockHeight;
