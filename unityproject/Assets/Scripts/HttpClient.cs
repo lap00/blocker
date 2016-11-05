@@ -20,15 +20,15 @@ public class HttpClient : MonoBehaviour
         StartCoroutine(getHighscores(action));
     }
 
-    public void PostHighscore(Highscore score)
+    public void PostCurrentState(State state)
     {
-        StartCoroutine(postHighscore(score));        
+        StartCoroutine(postCurrentState(state));        
     }
 
-    IEnumerator postHighscore(Highscore score)
+    IEnumerator postCurrentState(State score)
     {
         WWW www = new WWW(
-            host + "/highscores",
+            host + "/states",
             System.Text.Encoding.ASCII.GetBytes(JsonUtility.ToJson(score)),
             headers
         );
@@ -51,19 +51,25 @@ public class HttpClient : MonoBehaviour
     [Serializable]
     public class HighscoreList
     {
-        public Highscore[] highscores;
+        public State[] highscores;
     }
-
+    
     [Serializable]
-    public class Highscore
+    public class State
     {
         public string name;
         public float height;
-
-        public Highscore(string name, float height)
+        public float weight;
+        public int count;
+        public string token;
+        
+        public State(string name, float height, float weight, int count, string token = null)
         {
             this.name = name;
             this.height = height;
+            this.weight = weight;
+            this.count = count;
+            this.token = token;
         }
     }
 }
