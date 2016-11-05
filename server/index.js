@@ -2,46 +2,51 @@ var express = require('express'),
     bodyParser = require('body-parser'),
     assert = require('assert'),
     async = require('async'),
-    mongo = require('./mongo.js');
+    client = require('mongodb').MongoClient;
 
 var app = express();
+
+var mongoUrl = 'mongodb://' + process.env.MONGO_PORT_27017_TCP_ADDR + ':' + process.env.MONGO_PORT_27017_TCP_PORT + '/blocker';
 
 app.use(bodyParser.json());
 
 app.get('/highscores', function (req, res) {
-    mongo.go(function (err, db) {
+    client.connect(mongoUrl, function (err, db) {
         db.collection('bests').find({}).sort({height: -1}).limit(5).toArray(function (err, docs) {
             res.json({ highscores: docs });
         });
+        db.close();
     });
 });
 
 app.get('/highscores/:name', function (req, res) {
-    mongo.go(function (err, db) {
+    client.connect(mongoUrl, function (err, db) {
         db.collection('bests').findOne(
             { name: req.params.name.toLowerCase() },
             null,
             { sort: [['height', 'desc']] },
             function (err, doc) { res.json(doc ? doc : {}); }
         );
+        db.close();
     });
 });
 
 app.get('/highscores/nemesis/:height', function (req, res) {
-    mongo.go(function (err, db) {
+    client.connect(mongoUrl, function (err, db) {
         db.collection('bests').findOne(
             { height: { $gt: parseFloat(req.params.height) } },
             null,
             { sort: 'height' },
             function (err, doc) { res.json(doc ? doc : {}); }
         );
+        db.close();
     });
 });
 
 app.post('/states', function (req, res) {
-    async.waterfall([
-        function (callback) {
-            mongo.go(function (err, db) {
+    client.connect(mongoUrl, function (err, db) {
+        async.waterfall([
+            function (callback) {
                 db.collection('states').updateOne(
                     { token: req.body.token },
                     { $set: {
@@ -53,20 +58,16 @@ app.post('/states', function (req, res) {
                     { upsert: true }
                 );
                 return callback(null);
-            });
-        },
-        function (callback) {
-            mongo.go(function (err, db) {
+            },
+            function (callback) {
                 db.collection('bests').findOne(
                     { name: req.body.name.toLowerCase() },
                     null,
                     null,
                     function (err, doc) { return callback(null, doc ? doc : req.body); }
                 );
-            });
-        },
-        function (best, callback) {
-            mongo.go(function (err, db) {
+            },
+            function (best, callback) {
                 db.collection('bests').update(
                     { name: req.body.name.toLowerCase() },
                     { $set: {
@@ -76,18 +77,14 @@ app.post('/states', function (req, res) {
                     }},
                     { upsert: true }
                 );
-            });
-            return callback(null);
-        },
-        function (callback) {
-            res.json({});
-        }
-    ]);
-});
-
-mongo.go(function (err, db) {
-    assert.equal(err, null);
-    db.close();
+                return callback(null);
+            },
+            function (callback) {
+                db.close();
+                res.json({});
+            }
+        ]);
+    });
 });
 
 app.listen(8080);
