@@ -17,6 +17,7 @@ public class HeightChecker : MonoBehaviour {
     public GameObject[] hearts;
     public GameObject bar;
     static float maxHeight;
+    static string maxString;
 
     GlobalStateContainer stateContainer;
 
@@ -65,11 +66,11 @@ public class HeightChecker : MonoBehaviour {
         if (height > maxHeight)
         {
             maxHeight = height;
+            maxString = stateContainer.playerName + " - " + (maxHeight / unitsPerMeter).ToString("n2") + "m";
         }
-
-        bar.GetComponentInChildren<TextMesh>().text = stateContainer.playerName + " - " + (maxHeight / unitsPerMeter).ToString("n2") + "m";
+        bar.GetComponentInChildren<TextMesh>().text = maxString;
         bar.transform.position = new Vector3(bar.transform.position.x, maxHeight, bar.transform.position.z);
-        bar.SetActive(maxHeight >= 5f);
+        bar.SetActive(maxHeight >= 4f);
 
         stateContainer.currentHeight = height / unitsPerMeter;
         stateContainer.currentCount = blockCount;
