@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class HttpClient : MonoBehaviour
 {
-    public string host = "http://178.62.206.116:8080";
+    const string host = "http://178.62.206.116";
 
     Dictionary<string, string> headers;
 
