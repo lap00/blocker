@@ -77,7 +77,7 @@ public class HeightChecker : MonoBehaviour {
         {
             maxHeight = height;
         }
-        bar.GetComponentInChildren<TextMesh>().text = playerName + " - " + (height / unitsPerMeter).ToString("n2") + "m";
+        bar.GetComponentInChildren<TextMesh>().text = playerName + " - " + (maxHeight / unitsPerMeter).ToString("n2") + "m";
         bar.transform.position = new Vector3(bar.transform.position.x, maxHeight, bar.transform.position.z);
         bar.SetActive(maxHeight >= 5f);
 	}
