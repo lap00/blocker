@@ -80,17 +80,17 @@ public class HeightChecker : MonoBehaviour {
 
     void PrintBlockCount()
     {
-        blockCountText.text = "Block count: " + blockCount.ToString();
+        blockCountText.text = "Blocks: " + blockCount.ToString();
     }
 
     void PrintTotalMass()
     {
-        totalMassText.text = "Total mass: " + totalMass.ToString("n2");
+        totalMassText.text = "Tonnage: " + totalMass.ToString("n2");
     }
 
     void updateGameOverScoreText()
     {
-        gameOverScoreText.text = "Height: " + (height / unitsPerMeter).ToString("n2") + "m \n Block count: " + blockCount.ToString() + " Total mass: " + totalMass.ToString("n2");
+        gameOverScoreText.text = "Height: " + (height / unitsPerMeter).ToString("n2") + "m\nTonnage: " + totalMass.ToString("n2") + "\n Blocks: " + blockCount.ToString();
     }
 
     public void Die()
