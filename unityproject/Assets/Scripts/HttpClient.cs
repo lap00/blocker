@@ -24,7 +24,22 @@ public class HttpClient : MonoBehaviour
     {
         StartCoroutine(postStateCoroutine(state));        
     }
-    
+
+    public void GetNemesis(float height, Action<State> action)
+    {
+        StartCoroutine(getNemesisCoroutine(height, action));
+    }
+
+    IEnumerator getNemesisCoroutine(float height, Action<State> action)
+    {
+        WWW www = new WWW(host + "/highscores/nemesis/" + height.ToString("n2"));
+        
+        yield return www;
+        
+        State result = JsonUtility.FromJson<State>(www.text);
+        action(result);
+    }
+
     IEnumerator postStateCoroutine(State score)
     {
         WWW www = new WWW(
