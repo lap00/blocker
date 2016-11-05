@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class HttpClient : MonoBehaviour
 {
-    public string host = "http://jk.internal:8080";
+    public string host = "http://178.62.206.116:8080";
 
     Dictionary<string, string> headers;
 
@@ -22,7 +22,7 @@ public class HttpClient : MonoBehaviour
 
     public void PostState(State state)
     {
-        StartCoroutine(postStateCoroutine(state));        
+        StartCoroutine(postStateCoroutine(state));
     }
 
     public void GetNemesis(float height, Action<State> action)
@@ -49,9 +49,9 @@ public class HttpClient : MonoBehaviour
     IEnumerator getNemesisCoroutine(float height, Action<State> action)
     {
         WWW www = new WWW(host + "/highscores/nemesis/" + height.ToString("n2"));
-        
+
         yield return www;
-        
+
         State result = JsonUtility.FromJson<State>(www.text);
         action(result);
     }
@@ -70,7 +70,7 @@ public class HttpClient : MonoBehaviour
     IEnumerator getHighscores(Action<HighscoreList> action)
     {
         WWW www = new WWW(host + "/highscores");
-    
+
         yield return www;
 
         HighscoreList result = JsonUtility.FromJson<HighscoreList>(www.text);
@@ -82,7 +82,7 @@ public class HttpClient : MonoBehaviour
     {
         public State[] highscores;
     }
-    
+
     [Serializable]
     public class State
     {
@@ -91,7 +91,7 @@ public class HttpClient : MonoBehaviour
         public float weight;
         public int count;
         public string token;
-        
+
         public State(string name, float height, float weight, int count, string token = null)
         {
             this.name = name;
