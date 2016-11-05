@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.UI;
-using System;
 
 public class HeightChecker : MonoBehaviour {
 
@@ -29,7 +27,7 @@ public class HeightChecker : MonoBehaviour {
         nameContainer = GameObject.Find("NameContainer");
         if (nameContainer != null)
         {
-            playerName = nameContainer.GetComponent<NameContainer>().playerName;
+            playerName = nameContainer.GetComponent<GlobalStateContainer>().playerName;
         } 
         else
         {
