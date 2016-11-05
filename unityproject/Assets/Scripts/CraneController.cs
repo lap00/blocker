@@ -14,6 +14,10 @@ public class CraneController : MonoBehaviour
     LineRenderer lineRenderer;
     DistanceJoint2D distanceJoint;
 
+    Vector3 ropeTarget;
+    float ropeFactor = 0f;
+    public float ropeSpeed = 4.0f;
+
     // Use this for initialization
     void Start()
     {
@@ -42,18 +46,24 @@ public class CraneController : MonoBehaviour
 
         this.transform.position = new Vector3(newX, newY, pos.z);
         lineRenderer.SetPosition(0, this.transform.position);
-        lineRenderer.SetPosition(1, this.transform.position);
 
         if (currentBlock != null)
         {
-            lineRenderer.SetPosition(1, currentBlock.transform.position);
+            ropeFactor = Mathf.Min(1.0f, ropeFactor + ropeSpeed * Time.deltaTime);
+            ropeTarget = currentBlock.transform.position;
             if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space))
             {
                 distanceJoint.connectedBody = null;
                 currentBlock = null;
                 StartCoroutine(SpawnBox(2f));
             }
+        } 
+        else
+        {
+            ropeFactor = Mathf.Max(0.0f, ropeFactor - ropeSpeed * Time.deltaTime);
         }
+        
+        lineRenderer.SetPosition(1, Vector3.Lerp(pos, ropeTarget, ropeFactor));
     }
 
     IEnumerator SpawnBox(float wait)
@@ -73,7 +83,6 @@ public class CraneController : MonoBehaviour
         float distance = 2.0f;
         Vector3 startPos = new Vector3(pos.x + distance * Mathf.Cos(spawnAngle), pos.y + distance * Mathf.Sin(spawnAngle), pos.z);
         GameObject nextBlock = (GameObject)Instantiate(blockTypes[index], startPos, Quaternion.identity);
-        lineRenderer.SetPosition(1, nextBlock.transform.position);
         distanceJoint.connectedBody = nextBlock.GetComponent<Rigidbody2D>();
         currentBlock = nextBlock;
     }
