@@ -88,13 +88,15 @@ public class HeightChecker : MonoBehaviour {
         nemesisHeight = state.height;// * unitsPerMeter;
         SetBar(barNemesis, state);
         nemesisWaiting = false;
-        Debug.Log("Nemesis[" + state.name + ":" + state.height + "]");
     }
 
     void RecieveUpdateMax(HttpClient.State state)
     {
         SetBar(bar, state);
-        Debug.Log("Max[" + state.name + ":" + state.height + "]");
+        if (state.height < 0.01f)
+        {
+            bar.SetActive(false);
+        }
     }
 
     void SetBar(GameObject bar, HttpClient.State state)
