@@ -7,6 +7,14 @@ public class MarkAsFallen : MonoBehaviour {
 
     void OnCollisionEnter2D(Collision2D coll)
     {
-        gameObject.tag = "Block";
+        if (gameObject.tag != "Block")
+        {
+            float mass = this.GetComponent<Rigidbody2D>().mass;
+            if (mass > 1.5f)
+            {
+                Follow.shake = 0.02f * mass;
+            }            
+            gameObject.tag = "Block";
+        }
     }
 }
