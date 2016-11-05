@@ -3,12 +3,9 @@ using System.Collections;
 
 public class HitGround : MonoBehaviour {
 
-    public GameObject gameOverSplash;
-
-	// Use this for initialization
-	void Start () {
-        gameOverSplash.SetActive(false);
-	}
+    
+    public GameObject heightChecker;
+    
 	
 	// Update is called once per frame
 	void Update () {
@@ -17,7 +14,6 @@ public class HitGround : MonoBehaviour {
 
     void OnCollisionEnter2D(Collision2D coll)
     {
-        gameOverSplash.SetActive(true);
-        Time.timeScale = 0f;
+        heightChecker.GetComponent<HeightChecker>().Die();
     }
 }

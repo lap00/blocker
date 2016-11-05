@@ -14,8 +14,10 @@ public class HeightChecker : MonoBehaviour {
     public float unitsPerMeter;
     public Text gameOverScoreText;
     public GameObject nameContainer;
+    public GameObject gameOverSplash;
     public string playerName;
     public string guid;
+    public int lives;
 
     void Start()
     {
@@ -26,6 +28,8 @@ public class HeightChecker : MonoBehaviour {
         nameContainer = GameObject.Find("NameContainer");
         playerName = nameContainer.GetComponent<NameContainer>().playerName;
         guid = System.Guid.NewGuid().ToString();
+        lives = 3;
+        gameOverSplash.SetActive(false);
     }
 	
 	// Update is called once per frame
@@ -77,5 +81,16 @@ public class HeightChecker : MonoBehaviour {
     void updateGameOverScoreText()
     {
         gameOverScoreText.text = "Height: " + (height / unitsPerMeter).ToString("n2") + "m \n Block count: " + blockCount.ToString() + " Total mass: " + totalMass.ToString("n2");
+    }
+
+    public void Die()
+    {
+        lives--;
+
+        if (lives == 0)
+        {
+            gameOverSplash.SetActive(true);
+            Time.timeScale = 0f;
+        }
     }
 }
