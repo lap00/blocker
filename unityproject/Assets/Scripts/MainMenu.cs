@@ -12,7 +12,7 @@ public class MainMenu : MonoBehaviour {
 
     public void HighScores()
     {
-        SceneManager.LoadScene("Highscore");
+        SceneManager.LoadScene("HighscoreList");
     }
 
     public void Settings()
