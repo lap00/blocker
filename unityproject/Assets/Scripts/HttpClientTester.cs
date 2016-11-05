@@ -29,6 +29,10 @@ public class HttpClientTester : MonoBehaviour {
         if (GUI.Button(new Rect(50, 150, 200, 20), "Post current state")) {
             client.PostState(new HttpClient.State(player, height, weight, count, token));
         }
+        
+        if (GUI.Button(new Rect(50, 200, 200, 20), "Get personal best")) {
+            client.GetPersonalBest(player, this.LogPersonalBest);
+        }
     }
 
     private void LogHighscores(HttpClient.HighscoreList list)
@@ -40,5 +44,10 @@ public class HttpClientTester : MonoBehaviour {
     private void LogNemesis(HttpClient.State nemesis)
     {
         Debug.Log(nemesis.name + ": " + nemesis.height);
+    }
+    
+    private void LogPersonalBest(HttpClient.State best)
+    {
+        Debug.Log(best.name + ": " + best.height);
     }
 }

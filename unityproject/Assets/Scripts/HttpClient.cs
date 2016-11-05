@@ -30,6 +30,22 @@ public class HttpClient : MonoBehaviour
         StartCoroutine(getNemesisCoroutine(height, action));
     }
 
+
+    public void GetPersonalBest(string name, Action<State> action)
+    {
+        StartCoroutine(getPersonalBestCoroutine(name, action));
+    }
+
+    IEnumerator getPersonalBestCoroutine(string name, Action<State> action)
+    {
+        WWW www = new WWW(host + "/highscores/" + name);
+
+        yield return www;
+
+        State result = JsonUtility.FromJson<State>(www.text);
+        action(result);
+    }
+
     IEnumerator getNemesisCoroutine(float height, Action<State> action)
     {
         WWW www = new WWW(host + "/highscores/nemesis/" + height.ToString("n2"));
