@@ -15,11 +15,10 @@ public class HeightChecker : MonoBehaviour {
     public int lives;
     public int startLives = 3;
     public GameObject[] hearts;
-    public GameObject bar;
-    static float maxHeight;
-    static string maxString;
 
-    public GameObject barNemesis;
+    GameObject bar;
+    
+    GameObject barNemesis;
     bool nemesisWaiting = false;
     float nemesisHeight = -1;
 
@@ -37,6 +36,10 @@ public class HeightChecker : MonoBehaviour {
 
         lives = startLives;
         gameOverSplash.SetActive(false);
+
+        bar.SetActive(false);
+        barNemesis.SetActive(false);
+        GetComponent<HttpClient>().GetPersonalBest(stateContainer.playerName, RecieveUpdateMax);
     }
 	
 	void Update () {
@@ -69,22 +72,11 @@ public class HeightChecker : MonoBehaviour {
         }
 
         // nemesis bar
-        if (!nemesisWaiting && height > nemesisHeight)
+        if (!nemesisWaiting && height / unitsPerMeter > nemesisHeight)
         {
             nemesisWaiting = true;
             GetComponent<HttpClient>().GetNemesis(height / unitsPerMeter, RecieveUpdateNemesis);
         }
-        barNemesis.SetActive(nemesisHeight > 0f);
-
-        // special bar
-        if (height > maxHeight)
-        {
-            maxHeight = height;
-            maxString = stateContainer.playerName + " [" + (maxHeight / unitsPerMeter).ToString("n2") + "m]";
-        }
-        bar.GetComponentInChildren<TextMesh>().text = maxString;
-        bar.transform.position = new Vector3(bar.transform.position.x, maxHeight, bar.transform.position.z);
-        bar.SetActive(maxHeight >= 4f);
 
         stateContainer.currentHeight = height / unitsPerMeter;
         stateContainer.currentCount = blockCount;
@@ -93,9 +85,23 @@ public class HeightChecker : MonoBehaviour {
 
     void RecieveUpdateNemesis(HttpClient.State state)
     {
-        nemesisHeight = state.height;
-        barNemesis.GetComponentInChildren<TextMesh>().text = "" + state.name + " [" +  (nemesisHeight / unitsPerMeter).ToString("n2") + "m]";
-        barNemesis.transform.position = new Vector3(barNemesis.transform.position.x, nemesisHeight, barNemesis.transform.position.z);
+        nemesisHeight = state.height;// * unitsPerMeter;
+        SetBar(barNemesis, state);
+        nemesisWaiting = false;
+        Debug.Log("Nemesis[" + state.name + ":" + state.height + "]");
+    }
+
+    void RecieveUpdateMax(HttpClient.State state)
+    {
+        SetBar(bar, state);
+        Debug.Log("Max[" + state.name + ":" + state.height + "]");
+    }
+
+    void SetBar(GameObject bar, HttpClient.State state)
+    {
+        bar.GetComponentInChildren<TextMesh>().text = "" + state.name + " [" + (state.height).ToString("n2") + "m]"; ;
+        bar.transform.position = new Vector3(bar.transform.position.x, state.height * unitsPerMeter, bar.transform.position.z);
+        bar.SetActive(true);
     }
 
     void PrintHeight()
