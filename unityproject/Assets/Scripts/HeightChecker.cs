@@ -18,6 +18,7 @@ public class HeightChecker : MonoBehaviour {
     public string playerName;
     public string guid;
     public int lives;
+    public int startLives = 3;
 
     void Start()
     {
@@ -36,7 +37,7 @@ public class HeightChecker : MonoBehaviour {
         }
         
         guid = System.Guid.NewGuid().ToString();
-        lives = 3;
+        lives = startLives;
         gameOverSplash.SetActive(false);
     }
 	
