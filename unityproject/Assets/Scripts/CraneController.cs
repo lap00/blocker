@@ -51,7 +51,7 @@ public class CraneController : MonoBehaviour
         {
             ropeFactor = Mathf.Min(1.0f, ropeFactor + ropeSpeed * Time.deltaTime);
             ropeTarget = currentBlock.transform.position;
-            if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space))
+            if ((Input.GetMouseButtonDown(0) && Input.mousePosition.normalized.y < 0.8f) || Input.GetKeyDown(KeyCode.Space))
             {
                 distanceJoint.connectedBody = null;
                 currentBlock = null;
