@@ -19,6 +19,10 @@ public class HeightChecker : MonoBehaviour {
     static float maxHeight;
     static string maxString;
 
+    public GameObject barNemesis;
+    bool nemesisWaiting = false;
+    float nemesisHeight = -1;
+
     GlobalStateContainer stateContainer;
 
     void Start()
@@ -29,7 +33,8 @@ public class HeightChecker : MonoBehaviour {
         updateGameOverScoreText();
         stateContainer = GameObject.Find("StateKeeper").GetComponent<GlobalStateContainer>();
         bar = GameObject.Find("BarSpecial");
-        
+        barNemesis = GameObject.Find("BarNemesis");
+
         lives = startLives;
         gameOverSplash.SetActive(false);
     }
@@ -63,10 +68,19 @@ public class HeightChecker : MonoBehaviour {
             updateGameOverScoreText();
         }
 
+        // nemesis bar
+        if (!nemesisWaiting && height > nemesisHeight)
+        {
+            nemesisWaiting = true;
+            GetComponent<HttpClient>().GetNemesis(height / unitsPerMeter, RecieveUpdateNemesis);
+        }
+        barNemesis.SetActive(nemesisHeight > 0f);
+
+        // special bar
         if (height > maxHeight)
         {
             maxHeight = height;
-            maxString = stateContainer.playerName + " - " + (maxHeight / unitsPerMeter).ToString("n2") + "m";
+            maxString = stateContainer.playerName + " [" + (maxHeight / unitsPerMeter).ToString("n2") + "m]";
         }
         bar.GetComponentInChildren<TextMesh>().text = maxString;
         bar.transform.position = new Vector3(bar.transform.position.x, maxHeight, bar.transform.position.z);
@@ -75,6 +89,13 @@ public class HeightChecker : MonoBehaviour {
         stateContainer.currentHeight = height / unitsPerMeter;
         stateContainer.currentCount = blockCount;
         stateContainer.currentWeight = totalMass;
+    }
+
+    void RecieveUpdateNemesis(HttpClient.State state)
+    {
+        nemesisHeight = state.height;
+        barNemesis.GetComponentInChildren<TextMesh>().text = "" + state.name + " [" +  (nemesisHeight / unitsPerMeter).ToString("n2") + "m]";
+        barNemesis.transform.position = new Vector3(barNemesis.transform.position.x, nemesisHeight, barNemesis.transform.position.z);
     }
 
     void PrintHeight()
