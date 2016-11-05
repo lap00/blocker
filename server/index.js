@@ -16,6 +16,28 @@ app.get('/highscores', function (req, res) {
     });
 });
 
+app.get('/highscores/:name', function (req, res) {
+    mongo.go(function (err, db) {
+        db.collection('bests').findOne(
+            { name: req.params.name.toLowerCase() },
+            null,
+            { sort: [['height', 'desc']] },
+            function (err, doc) { res.json(doc ? doc : {}); }
+        );
+    });
+});
+
+app.get('/highscores/nemesis/:height', function (req, res) {
+    mongo.go(function (err, db) {
+        db.collection('bests').findOne(
+            { height: { $gt: parseFloat(req.params.height) } },
+            null,
+            { sort: 'height' },
+            function (err, doc) { res.json(doc ? doc : {}); }
+        );
+    });
+});
+
 app.post('/states', function (req, res) {
     async.waterfall([
         function (callback) {
@@ -23,7 +45,7 @@ app.post('/states', function (req, res) {
                 db.collection('states').updateOne(
                     { token: req.body.token },
                     { $set: {
-                        name: req.body.name,
+                        name: req.body.name.toLowerCase(),
                         height: req.body.height,
                         count: req.body.count,
                         weight: req.body.weight
@@ -36,7 +58,7 @@ app.post('/states', function (req, res) {
         function (callback) {
             mongo.go(function (err, db) {
                 db.collection('bests').findOne(
-                    { name: req.body.name },
+                    { name: req.body.name.toLowerCase() },
                     null,
                     null,
                     function (err, doc) { return callback(null, doc ? doc : req.body); }
@@ -46,7 +68,7 @@ app.post('/states', function (req, res) {
         function (best, callback) {
             mongo.go(function (err, db) {
                 db.collection('bests').update(
-                    { name: req.body.name },
+                    { name: req.body.name.toLowerCase() },
                     { $set: {
                         height: Math.max(req.body.height, best.height),
                         weight: Math.max(req.body.weight, best.weight),
