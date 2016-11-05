@@ -12,6 +12,8 @@ public class HeightChecker : MonoBehaviour {
     public Text totalMassText;
     public float unitsPerMeter;
     public Text gameOverScoreText;
+    public GameObject nameContainer;
+    public string playerName;
 
     void Start()
     {
@@ -19,13 +21,15 @@ public class HeightChecker : MonoBehaviour {
         PrintBlockCount();
         PrintTotalMass();
         updateGameOverScoreText();
+        nameContainer = GameObject.Find("NameContainer");
+        playerName = nameContainer.GetComponent<NameContainer>().playerName;
     }
 	
 	// Update is called once per frame
 	void Update () {
 
         GameObject[] blocks = GameObject.FindGameObjectsWithTag("Block");
-
+        
         height = 0;
         blockCount = 0;
         totalMass = 0;
