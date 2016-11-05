@@ -19,6 +19,7 @@ public class HeightChecker : MonoBehaviour {
     public int startLives = 3;
     public GameObject[] hearts;
     public GameObject bar;
+    static float maxHeight;
 
     void Start()
     {
@@ -27,6 +28,7 @@ public class HeightChecker : MonoBehaviour {
         PrintTotalMass();
         updateGameOverScoreText();
         nameContainer = GameObject.Find("NameContainer");
+        bar = GameObject.Find("BarSpecial");
         if (nameContainer != null)
         {
             playerName = nameContainer.GetComponent<GlobalStateContainer>().playerName;
@@ -70,7 +72,14 @@ public class HeightChecker : MonoBehaviour {
 
             updateGameOverScoreText();
         }
-        bar.transform.position = new Vector3(bar.transform.position.x, Mathf.Max(1.0f, Mathf.Floor(height / 10f)) * 10f, bar.transform.position.z);
+
+        if (height > maxHeight)
+        {
+            maxHeight = height;
+        }
+        bar.GetComponentInChildren<TextMesh>().text = playerName + " - " + (height / unitsPerMeter).ToString("n2") + "m";
+        bar.transform.position = new Vector3(bar.transform.position.x, maxHeight, bar.transform.position.z);
+        bar.SetActive(maxHeight >= 5f);
 	}
 
     void PrintHeight()

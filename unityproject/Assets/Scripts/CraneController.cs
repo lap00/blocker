@@ -79,7 +79,7 @@ public class CraneController : MonoBehaviour
 
 
         Vector3 pos = this.transform.position;
-        float spawnAngle = Random.Range(3.6f, 5.8f);
+        float spawnAngle = 4.7f + Random.Range(-0.5f, 0.5f);
         float distance = 2.0f;
         Vector3 startPos = new Vector3(pos.x + distance * Mathf.Cos(spawnAngle), pos.y + distance * Mathf.Sin(spawnAngle), pos.z);
         GameObject nextBlock = (GameObject)Instantiate(blockTypes[index], startPos, Quaternion.identity);
