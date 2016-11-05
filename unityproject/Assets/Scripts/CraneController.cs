@@ -69,7 +69,10 @@ public class CraneController : MonoBehaviour
 
 
         Vector3 pos = this.transform.position;
-        GameObject nextBlock = (GameObject)Instantiate(blockTypes[index], new Vector3(pos.x - 1.0f, pos.y - 2.0f, pos.z), Quaternion.identity);
+        float spawnAngle = Random.Range(3.6f, 5.8f);
+        float distance = 2.0f;
+        Vector3 startPos = new Vector3(pos.x + distance * Mathf.Cos(spawnAngle), pos.y + distance * Mathf.Sin(spawnAngle), pos.z);
+        GameObject nextBlock = (GameObject)Instantiate(blockTypes[index], startPos, Quaternion.identity);
         lineRenderer.SetPosition(1, nextBlock.transform.position);
         distanceJoint.connectedBody = nextBlock.GetComponent<Rigidbody2D>();
         currentBlock = nextBlock;
