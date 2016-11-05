@@ -72,7 +72,7 @@ public class HeightChecker : MonoBehaviour {
         bar.transform.position = new Vector3(bar.transform.position.x, maxHeight, bar.transform.position.z);
         bar.SetActive(maxHeight >= 4f);
 
-        stateContainer.currentHeight = height;
+        stateContainer.currentHeight = height / unitsPerMeter;
         stateContainer.currentCount = blockCount;
         stateContainer.currentWeight = totalMass;
     }

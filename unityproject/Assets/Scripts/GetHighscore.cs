@@ -25,7 +25,7 @@ public class GetHighscore : MonoBehaviour {
 		for (int i = 0; i < Mathf.Min(5, list.highscores.Length); i++)
 		{
 			nameTexts[i].text = list.highscores[i].name;
-			scoreTexts[i].text = list.highscores[i].height.ToString();
+			scoreTexts[i].text = list.highscores[i].height.ToString("N2");
 			
 		}
 	}
