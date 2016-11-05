@@ -18,6 +18,7 @@ public class HeightChecker : MonoBehaviour {
     public int lives;
     public int startLives = 3;
     public GameObject[] hearts;
+    public GameObject bar;
 
     void Start()
     {
@@ -69,6 +70,7 @@ public class HeightChecker : MonoBehaviour {
 
             updateGameOverScoreText();
         }
+        bar.transform.position = new Vector3(bar.transform.position.x, Mathf.Max(1.0f, Mathf.Floor(height / 10f)) * 10f, bar.transform.position.z);
 	}
 
     void PrintHeight()
