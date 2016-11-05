@@ -19,6 +19,7 @@ public class HeightChecker : MonoBehaviour {
     public string guid;
     public int lives;
     public int startLives = 3;
+    public GameObject[] hearts;
 
     void Start()
     {
@@ -95,6 +96,11 @@ public class HeightChecker : MonoBehaviour {
     public void Die()
     {
         lives--;
+
+        for (int i=0; i<hearts.Length; i++)
+        {
+            hearts[i].GetComponent<SpriteRenderer>().enabled = (lives > i);
+        }
 
         if (lives == 0)
         {
