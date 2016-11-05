@@ -21,8 +21,12 @@ public class HttpClientTester : MonoBehaviour {
         if (GUI.Button(new Rect(50, 50, 200, 20), "Get highscores")) {
             client.GetHighscores(this.LogHighscores);
         }
-        
-        if (GUI.Button(new Rect(50, 100, 200, 20), "Post current state")) {
+
+        if (GUI.Button(new Rect(50, 100, 200, 20), "Get nemesis")) {
+            client.GetNemesis(height, this.LogNemesis);
+        }
+
+        if (GUI.Button(new Rect(50, 150, 200, 20), "Post current state")) {
             client.PostState(new HttpClient.State(player, height, weight, count, token));
         }
     }
@@ -31,5 +35,10 @@ public class HttpClientTester : MonoBehaviour {
     {
         foreach (HttpClient.State s in list.highscores)
             Debug.Log(s.name + ": " + s.height);
+    }
+
+    private void LogNemesis(HttpClient.State nemesis)
+    {
+        Debug.Log(nemesis.name + ": " + nemesis.height);
     }
 }
