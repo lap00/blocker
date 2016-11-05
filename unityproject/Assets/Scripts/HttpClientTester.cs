@@ -23,7 +23,7 @@ public class HttpClientTester : MonoBehaviour {
         }
         
         if (GUI.Button(new Rect(50, 100, 200, 20), "Post current state")) {
-            client.PostCurrentState(new HttpClient.State(player, height, weight, count, token));
+            client.PostState(new HttpClient.State(player, height, weight, count, token));
         }
     }
 

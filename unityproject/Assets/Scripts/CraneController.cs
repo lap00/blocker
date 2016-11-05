@@ -9,7 +9,6 @@ public class CraneController : MonoBehaviour
     GameObject currentBlock = null;
     public float xRange = 3.0f;
     public float yOffset = 3.0f; // distance from highest point to crane
-    float angle = 0f;
     public HeightChecker heightChecker;
     LineRenderer lineRenderer;
     DistanceJoint2D distanceJoint;

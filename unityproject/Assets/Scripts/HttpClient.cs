@@ -20,12 +20,12 @@ public class HttpClient : MonoBehaviour
         StartCoroutine(getHighscores(action));
     }
 
-    public void PostCurrentState(State state)
+    public void PostState(State state)
     {
-        StartCoroutine(postCurrentState(state));        
+        StartCoroutine(postStateCoroutine(state));        
     }
-
-    IEnumerator postCurrentState(State score)
+    
+    IEnumerator postStateCoroutine(State score)
     {
         WWW www = new WWW(
             host + "/states",
@@ -34,8 +34,6 @@ public class HttpClient : MonoBehaviour
         );
 
         yield return www;
-
-        Debug.Log(www.text);
     }
 
     IEnumerator getHighscores(Action<HighscoreList> action)

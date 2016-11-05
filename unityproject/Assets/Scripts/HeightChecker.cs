@@ -11,15 +11,14 @@ public class HeightChecker : MonoBehaviour {
     public Text totalMassText;
     public float unitsPerMeter;
     public Text gameOverScoreText;
-    public GameObject nameContainer;
     public GameObject gameOverSplash;
-    public string playerName;
-    public string guid;
     public int lives;
     public int startLives = 3;
     public GameObject[] hearts;
     public GameObject bar;
     static float maxHeight;
+
+    GlobalStateContainer stateContainer;
 
     void Start()
     {
@@ -27,23 +26,13 @@ public class HeightChecker : MonoBehaviour {
         PrintBlockCount();
         PrintTotalMass();
         updateGameOverScoreText();
-        nameContainer = GameObject.Find("NameContainer");
+        stateContainer = GameObject.Find("StateKeeper").GetComponent<GlobalStateContainer>();
         bar = GameObject.Find("BarSpecial");
-        if (nameContainer != null)
-        {
-            playerName = nameContainer.GetComponent<GlobalStateContainer>().playerName;
-        } 
-        else
-        {
-            playerName = "Jimmy";
-        }
         
-        guid = System.Guid.NewGuid().ToString();
         lives = startLives;
         gameOverSplash.SetActive(false);
     }
 	
-	// Update is called once per frame
 	void Update () {
 
         GameObject[] blocks = GameObject.FindGameObjectsWithTag("Block");
@@ -77,10 +66,15 @@ public class HeightChecker : MonoBehaviour {
         {
             maxHeight = height;
         }
-        bar.GetComponentInChildren<TextMesh>().text = playerName + " - " + (maxHeight / unitsPerMeter).ToString("n2") + "m";
+
+        bar.GetComponentInChildren<TextMesh>().text = stateContainer.playerName + " - " + (maxHeight / unitsPerMeter).ToString("n2") + "m";
         bar.transform.position = new Vector3(bar.transform.position.x, maxHeight, bar.transform.position.z);
         bar.SetActive(maxHeight >= 5f);
-	}
+
+        stateContainer.currentHeight = height;
+        stateContainer.currentCount = blockCount;
+        stateContainer.currentWeight = totalMass;
+    }
 
     void PrintHeight()
     {
