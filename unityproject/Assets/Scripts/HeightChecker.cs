@@ -100,7 +100,7 @@ public class HeightChecker : MonoBehaviour {
 
     void PrintHeight()
     {
-        heightText.text = "Height: " + (height / unitsPerMeter).ToString("n2");
+        heightText.text = (height / unitsPerMeter).ToString("n2");
     }
 
     void PrintBlockCount()
