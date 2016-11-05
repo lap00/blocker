@@ -26,7 +26,15 @@ public class HeightChecker : MonoBehaviour {
         PrintTotalMass();
         updateGameOverScoreText();
         nameContainer = GameObject.Find("NameContainer");
-        playerName = nameContainer.GetComponent<NameContainer>().playerName;
+        if (nameContainer != null)
+        {
+            playerName = nameContainer.GetComponent<NameContainer>().playerName;
+        } 
+        else
+        {
+            playerName = "Jimmy";
+        }
+        
         guid = System.Guid.NewGuid().ToString();
         lives = 3;
         gameOverSplash.SetActive(false);
@@ -43,10 +51,10 @@ public class HeightChecker : MonoBehaviour {
         
         foreach (GameObject block in blocks)
         {
-            float blockHeight = block.GetComponent<BoxCollider2D>().bounds.max.y;
-            if (blockHeight > height)
+            BoxCollider2D collider = block.GetComponent<BoxCollider2D>();
+            if (collider != null && collider.bounds.max.y > height)
             {
-                height = blockHeight;
+                height = collider.bounds.max.y;
             }
 
             PrintHeight();
